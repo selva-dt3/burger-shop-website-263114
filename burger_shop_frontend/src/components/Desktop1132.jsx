@@ -66,9 +66,9 @@ function Desktop1132({
         {/* Group 1 - Hero (structure matches static HTML: inner wrapper then three absolute text nodes) */}
         <section id="grp-13-26" aria-label={ariaLabels?.heroGroup || 'Hero Title Group'} data-id="13:26">
           <div id="grp-13-26-inner">
-            <h2 id="txt-13-25" data-id="13:25">{heroTitle}</h2>
-            <h1 id="txt-13-24" data-id="13:24">{heroHeading}</h1>
-            <p id="txt-15-43" data-id="15:43">{heroSubtitle}</p>
+            <h2 id="txt-13-25" data-id="13:25" className="u-anim-base">{heroTitle}</h2>
+            <h1 id="txt-13-24" data-id="13:24" className="u-anim-base">{heroHeading}</h1>
+            <p id="txt-15-43" data-id="15:43" className="u-anim-base">{heroSubtitle}</p>
           </div>
         </section>
 
@@ -104,22 +104,22 @@ function Desktop1132({
             <span id="nav-brand-13-18" data-id="13:18">{brandText}</span>
 
             {/* Frame 1 (Home) */}
-            <div id="nav-fr-13-5" className="nav-item" data-id="13:5" data-label={home}>
+            <div id="nav-fr-13-5" className="nav-item u-anim-base" data-id="13:5" data-label={home} role="link" tabIndex={0}>
               <span className="txt">{home}</span>
             </div>
 
             {/* Frame 2 (Menu) */}
-            <div id="nav-fr-13-7" className="nav-item" data-id="13:7" data-label={menu}>
+            <div id="nav-fr-13-7" className="nav-item u-anim-base" data-id="13:7" data-label={menu} role="link" tabIndex={0}>
               <span className="txt">{menu}</span>
             </div>
 
             {/* Frame 3 (About) */}
-            <div id="nav-fr-13-11" className="nav-item" data-id="13:11" data-label={about}>
+            <div id="nav-fr-13-11" className="nav-item u-anim-base" data-id="13:11" data-label={about} role="link" tabIndex={0}>
               <span className="txt">{about}</span>
             </div>
 
             {/* Frame 4 (Shop) */}
-            <div id="nav-fr-13-13" className="nav-item" data-id="13:13" data-label={shop}>
+            <div id="nav-fr-13-13" className="nav-item u-anim-base" data-id="13:13" data-label={shop} role="link" tabIndex={0}>
               <span className="txt">{shop}</span>
             </div>
           </div>

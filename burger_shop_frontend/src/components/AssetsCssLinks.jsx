@@ -38,6 +38,13 @@ const AssetsCssLinks = () => {
       created.push(link);
     });
 
+    // Load screen-specific JS for micro-interactions (progressive enhancement)
+    const script = document.createElement('script');
+    script.src = '/assets/desktop1-13-2.js';
+    script.defer = true;
+    document.body.appendChild(script);
+    created.push(script);
+
     return () => {
       // Clean up on unmount
       created.forEach(link => {
