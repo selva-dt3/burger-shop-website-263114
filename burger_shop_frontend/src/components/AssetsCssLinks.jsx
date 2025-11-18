@@ -23,7 +23,8 @@ const AssetsCssLinks = () => {
     document.head.appendChild(fontLink);
     created.push(fontLink);
 
-    // External CSS assets (order matters: tokens, then screen-specific CSS files)
+    // External CSS assets (order matters strictly):
+    // 1) common tokens, 2) base screen CSS (desktop-1-screen_13-2.css), 3) adjustments (desktop1-13-2.css)
     const cssAssets = [
       '/assets/common.css',
       '/assets/desktop-1-screen_13-2.css',
