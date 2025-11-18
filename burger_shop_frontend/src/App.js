@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Desktop1132Page from './pages/Desktop1132Page';
 
 // PUBLIC_INTERFACE
 function App() {
@@ -42,6 +43,9 @@ function App() {
           Learn React
         </a>
       </header>
+
+      {/* Demo mount for Desktop1132 screen */}
+      <Desktop1132Page />
     </div>
   );
 }
