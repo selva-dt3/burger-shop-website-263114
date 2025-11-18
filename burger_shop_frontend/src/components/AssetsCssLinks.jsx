@@ -75,7 +75,9 @@ const AssetsCssLinks = () => {
       .then(() => addLink('/assets/common.css'))
       .then(() => addLink('/assets/desktop-1-screen_13-2.css'))
       .then(() => addLink('/assets/desktop1-13-2.css'))
-      .then(() => addScript('/assets/desktop1-13-2.js'))
+      // Note: Do NOT inject /assets/desktop1-13-2.js in SPA to avoid parsing HTML as JS on 404s.
+      // The SPA re-implements interactions in React; loading this script is unnecessary and can cause
+      // "Unexpected token <" if the server returns index.html for unknown paths.
       .catch((err) => {
         // eslint-disable-next-line no-console
         console.error('[AssetsCssLinks] One or more assets failed to load:', err);
