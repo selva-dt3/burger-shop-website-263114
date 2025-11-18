@@ -3,53 +3,92 @@ import React, { useEffect } from 'react';
 /**
  * PUBLIC_INTERFACE
  * AssetsCssLinks
- * Injects <link> tags for assets/common.css and assets/desktop1-13-2.css into the document head.
+ * Injects <link> tags for assets/common.css and screen CSS files into the document head in strict order.
  * Also injects Google Fonts used by the Figma file so typography matches exactly.
  * This avoids CRA's restriction on importing CSS outside of src.
  *
  * Notes:
- * - Files must be available at /assets/common.css and /assets/desktop1-13-2.css (public root).
- * - Fonts link: Lexend Zetta and Sansita Swashed.
+ * - Files are served from the web root at /assets/*.css.
+ * - Load order (critical):
+ *   1) /assets/common.css
+ *   2) /assets/desktop-1-screen_13-2.css
+ *   3) /assets/desktop1-13-2.css
  */
 const AssetsCssLinks = () => {
   useEffect(() => {
     const created = [];
 
-    // Google Fonts
-    const fontsHref = 'https://fonts.googleapis.com/css2?family=Lexend+Zetta:wght@200;400;500;700&family=Sansita+Swashed:wght@400;700&display=swap';
+    const log = (...args) => {
+      // eslint-disable-next-line no-console
+      console.log('[AssetsCssLinks]', ...args);
+    };
+
+    const addLink = (href) => {
+      return new Promise((resolve, reject) => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = href; // absolute path from root
+        link.onload = () => {
+          log('Loaded stylesheet:', href);
+          resolve(link);
+        };
+        link.onerror = () => {
+          // eslint-disable-next-line no-console
+          console.error('[AssetsCssLinks] Failed to load stylesheet:', href);
+          reject(new Error(`Failed to load CSS: ${href}`));
+        };
+        document.head.appendChild(link);
+        created.push(link);
+      });
+    };
+
+    const addScript = (src) => {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.defer = true;
+        script.onload = () => {
+          log('Loaded script:', src);
+          resolve(script);
+        };
+        script.onerror = () => {
+          // eslint-disable-next-line no-console
+          console.error('[AssetsCssLinks] Failed to load script:', src);
+          reject(new Error(`Failed to load script: ${src}`));
+        };
+        document.body.appendChild(script);
+        created.push(script);
+      });
+    };
+
+    const fontsHref =
+      'https://fonts.googleapis.com/css2?family=Lexend+Zetta:wght@200;400;500;700&family=Sansita+Swashed:wght@400;700&display=swap';
     const fontLink = document.createElement('link');
     fontLink.rel = 'stylesheet';
     fontLink.href = fontsHref;
     document.head.appendChild(fontLink);
     created.push(fontLink);
+    log('Injected Google Fonts link');
 
-    // External CSS assets (order matters strictly):
-    // 1) common tokens, 2) base screen CSS (desktop-1-screen_13-2.css), 3) adjustments (desktop1-13-2.css)
-    const cssAssets = [
-      '/assets/common.css',
-      '/assets/desktop-1-screen_13-2.css',
-      '/assets/desktop1-13-2.css',
-    ];
-    cssAssets.forEach((href) => {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = href;
-      document.head.appendChild(link);
-      created.push(link);
-    });
+    // Load CSS sequentially to guarantee cascade order
+    const chain = Promise.resolve()
+      .then(() => addLink('/assets/common.css'))
+      .then(() => addLink('/assets/desktop-1-screen_13-2.css'))
+      .then(() => addLink('/assets/desktop1-13-2.css'))
+      .then(() => addScript('/assets/desktop1-13-2.js'))
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.error('[AssetsCssLinks] One or more assets failed to load:', err);
+      });
 
-    // Load screen-specific JS for micro-interactions (progressive enhancement)
-    const script = document.createElement('script');
-    script.src = '/assets/desktop1-13-2.js';
-    script.defer = true;
-    document.body.appendChild(script);
-    created.push(script);
+    // retain reference to avoid unhandled rejection
+    void chain;
 
     return () => {
       // Clean up on unmount
-      created.forEach(link => {
-        if (link && link.parentNode) {
-          link.parentNode.removeChild(link);
+      created.forEach((node) => {
+        if (node && node.parentNode) {
+          node.parentNode.removeChild(node);
         }
       });
     };

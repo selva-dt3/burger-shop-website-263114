@@ -47,6 +47,17 @@ function Desktop1132({
   // Exact icon path from assets, include fixed size to avoid layout shift
   const dotImageSrc = '/assets/figmaimages/figma_image_15_12.svg';
 
+  // Minimal fallback inline styles so the screen is legible even if external CSS fails to load.
+  const fallbackRootStyle = {
+    backgroundColor: '#12372a', // matches var(--color-12372a)
+    color: '#fbfada', // high-contrast text fallback from tokens
+    width: 1728,
+    height: 1117,
+    position: 'relative',
+    overflow: 'hidden',
+    fontFamily: "'Lexend Zetta', Arial, Helvetica, sans-serif",
+  };
+
   return (
     <>
       <AssetsCssLinks />
@@ -56,6 +67,7 @@ function Desktop1132({
         role="main"
         aria-label="Desktop-1 screen 13:2"
         data-id="13:2"
+        style={fallbackRootStyle}
       >
         {/* Ellipse 2 */}
         <div id="el-15-6" aria-hidden="true" data-id="15:6"></div>
