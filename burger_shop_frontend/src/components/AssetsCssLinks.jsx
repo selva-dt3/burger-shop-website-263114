@@ -23,8 +23,13 @@ const AssetsCssLinks = () => {
     document.head.appendChild(fontLink);
     created.push(fontLink);
 
-    // External CSS assets
-    ['/assets/common.css', '/assets/desktop1-13-2.css'].forEach((href) => {
+    // External CSS assets (order matters: tokens, then screen-specific CSS files)
+    const cssAssets = [
+      '/assets/common.css',
+      '/assets/desktop-1-screen_13-2.css',
+      '/assets/desktop1-13-2.css',
+    ];
+    cssAssets.forEach((href) => {
       const link = document.createElement('link');
       link.rel = 'stylesheet';
       link.href = href;
